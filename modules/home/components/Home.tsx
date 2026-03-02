@@ -1,3 +1,5 @@
+"use client";
+
 import dynamic from "next/dynamic";
 
 import Breakline from "@/common/components/elements/Breakline";

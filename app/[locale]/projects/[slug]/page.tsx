@@ -14,10 +14,10 @@ import Link from "next/link";
 export const revalidate = 60; // Revalidate every 60 seconds
 
 interface ProjectDetailPageProps {
-  params: {
+  params: Promise<{
     slug: string;
     locale: string;
-  };
+  }>;
 }
 
 interface SanityProject {
@@ -47,8 +47,8 @@ const getProjectDetail = async (slug: string): Promise<SanityProject | null> => 
 export async function generateMetadata({
   params,
 }: ProjectDetailPageProps): Promise<Metadata> {
-  const project = await getProjectDetail(params?.slug);
-  const locale = params.locale || "en";
+  const { slug, locale } = await params;
+  const project = await getProjectDetail(slug);
 
   if (!project) {
     return {
@@ -65,7 +65,7 @@ export async function generateMetadata({
     description: project.description,
     openGraph: {
       images: thumbnailUrl ? [thumbnailUrl] : [],
-      url: `${METADATA.openGraph.url}/projects/${params.slug}`,
+      url: `${METADATA.openGraph.url}/projects/${slug}`,
       siteName: METADATA.openGraph.siteName,
       locale: locale === "id" ? "id_ID" : "en_US",
       type: "article",
@@ -73,13 +73,14 @@ export async function generateMetadata({
     },
     keywords: project.title,
     alternates: {
-      canonical: `${process.env.DOMAIN}/${locale}/projects/${params.slug}`,
+      canonical: `${process.env.DOMAIN}/${locale}/projects/${slug}`,
     },
   };
 }
 
 const ProjectDetailPage = async ({ params }: ProjectDetailPageProps) => {
-  const project = await getProjectDetail(params?.slug);
+  const { slug } = await params;
+  const project = await getProjectDetail(slug);
 
   if (!project) {
     return (

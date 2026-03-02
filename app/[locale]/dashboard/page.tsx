@@ -7,11 +7,10 @@ import { METADATA } from "@/common/constants/metadata";
 
 export const revalidate = 60;
 
-type Props = { params: { locale: string } };
+type Props = { params: Promise<{ locale: string }> };
 
-export async function generateMetadata({
-  params: { locale },
-}: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "DashboardPage" });
   return {
     title: `${t("title")} ${METADATA.exTitle}`,
@@ -20,7 +19,8 @@ export async function generateMetadata({
   };
 }
 
-const DashboardPage = async ({ params: { locale } }: Props) => {
+const DashboardPage = async ({ params }: Props) => {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "DashboardPage" });
   return (
     <Container data-aos="fade-up">

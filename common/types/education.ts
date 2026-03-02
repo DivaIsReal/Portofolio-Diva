@@ -2,7 +2,7 @@ export type EducationProps = {
   school: string;
   major: string;
   logo: string | null;
-  location: string;
+  location?: string;
   degree: string;
   GPA?: string;
   start_year: number;

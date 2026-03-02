@@ -5,12 +5,10 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import "../globals.css";
 
 import Layouts from "@/common/components/layouts";
 import ThemeProviderContext from "@/common/stores/theme";
 import { METADATA } from "@/common/constants/metadata";
-import { inter } from "@/common/styles/fonts";
 import SkeletonThemeProvider from "@/SkeletonThemeProvider";
 import { routing } from "@/i18n/routing";
 
@@ -40,15 +38,14 @@ export const metadata: Metadata = {
   },
 };
 
-interface RootLayoutProps {
+interface LocaleLayoutProps {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
-const RootLayout = async ({
-  children,
-  params: { locale },
-}: RootLayoutProps) => {
+const LocaleLayout = async ({ children, params }: LocaleLayoutProps) => {
+  const { locale } = await params;
+
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
@@ -58,37 +55,33 @@ const RootLayout = async ({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} suppressHydrationWarning={true}>
-      <head>
-        <Script
-          defer
-          src="https://cloud.umami.is/script.js"
-          data-website-id="91c868c5-2a89-4a1d-b292-56c40ea30137"
-        />
-      </head>
-      <body className={inter.className}>
-        <NextTopLoader
-          color="#fbe400"
-          initialPosition={0.08}
-          crawlSpeed={200}
-          height={3}
-          crawl={true}
-          showSpinner={false}
-          easing="ease"
-          speed={200}
-          shadow="0 0 10px #fbe400,0 0 5px #ffffb8"
-        />
-        <NextIntlClientProvider messages={messages} locale={locale}>
-          <ThemeProviderContext>
-            <SkeletonThemeProvider>
-              <Layouts>{children}</Layouts>
-            </SkeletonThemeProvider>
-          </ThemeProviderContext>
-        </NextIntlClientProvider>
-        <Analytics />
-      </body>
-    </html>
+    <>
+      <Script
+        defer
+        src="https://cloud.umami.is/script.js"
+        data-website-id="91c868c5-2a89-4a1d-b292-56c40ea30137"
+      />
+      <NextTopLoader
+        color="#fbe400"
+        initialPosition={0.08}
+        crawlSpeed={200}
+        height={3}
+        crawl={true}
+        showSpinner={false}
+        easing="ease"
+        speed={200}
+        shadow="0 0 10px #fbe400,0 0 5px #ffffb8"
+      />
+      <NextIntlClientProvider messages={messages} locale={locale}>
+        <ThemeProviderContext>
+          <SkeletonThemeProvider>
+            <Layouts>{children}</Layouts>
+          </SkeletonThemeProvider>
+        </ThemeProviderContext>
+      </NextIntlClientProvider>
+      <Analytics />
+    </>
   );
 };
 
-export default RootLayout;
+export default LocaleLayout;

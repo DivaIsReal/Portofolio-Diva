@@ -11,12 +11,11 @@ import { METADATA } from "@/common/constants/metadata";
 export const revalidate = 60;
 
 type Props = {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 };
 
-export async function generateMetadata({
-  params: { locale },
-}: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "ContentsPage" });
 
   return {
@@ -28,7 +27,8 @@ export async function generateMetadata({
   };
 }
 
-const ContentsPage = async ({ params: { locale } }: Props) => {
+const ContentsPage = async ({ params }: Props) => {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "ContentsPage" });
 
   return (

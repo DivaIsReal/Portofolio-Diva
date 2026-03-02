@@ -6,12 +6,13 @@ import Home from "@/modules/home";
 import { METADATA } from "@/common/constants/metadata";
 
 interface HomePageProps {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
 export async function generateMetadata({
-  params: { locale },
+  params,
 }: HomePageProps): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "HomePage" });
 
   return {
@@ -31,7 +32,8 @@ export async function generateMetadata({
   };
 }
 
-const HomePage = async ({ params: { locale } }: HomePageProps) => {
+const HomePage = async ({ params }: HomePageProps) => {
+  await params;
   return (
     <Container data-aos="fade-up">
       <Home />

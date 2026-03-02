@@ -8,12 +8,13 @@ import { METADATA } from "@/common/constants/metadata";
 import { Suspense } from "react";
 
 interface AchievementsPageProps {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
 export async function generateMetadata({
-  params: { locale },
+  params,
 }: AchievementsPageProps): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "AchievementsPage" });
 
   return {
@@ -26,9 +27,8 @@ export async function generateMetadata({
   };
 }
 
-const AchievementsPage = async ({
-  params: { locale },
-}: AchievementsPageProps) => {
+const AchievementsPage = async ({ params }: AchievementsPageProps) => {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "AchievementsPage" });
 
   return (
