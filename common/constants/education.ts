@@ -13,7 +13,7 @@ export const EDUCATION: EducationProps[] = [
   {
     school: "SMK Negeri 1 Pleret",
     major: "Computer and Network Engineering",
-    logo: "/images/Logo-smkn1pleret.jpg",
+    logo: "/images/Logo-smkn1pleret.png",
     degree: "Vocational High School",
     start_year: 2020,
     end_year: 2023,
