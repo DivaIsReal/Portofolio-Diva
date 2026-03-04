@@ -1,15 +1,15 @@
 import { defineField, defineType } from "sanity";
 
 export default defineType({
-  name: "projects",
-  title: "Projects",
+  name: "blog",
+  title: "Blog",
   type: "document",
   fields: [
     defineField({
       name: "title",
       title: "Title",
       type: "string",
-      description: "Project/lab title",
+      description: "Blog post title",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -17,15 +17,15 @@ export default defineType({
       title: "Slug",
       type: "slug",
       options: { source: "title", maxLength: 96 },
-      description: "URL-friendly version of the title for documentation page",
+      description: "URL-friendly version of the title",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "description",
-      title: "Description",
+      name: "excerpt",
+      title: "Excerpt",
       type: "text",
       rows: 3,
-      description: "Short description of the project",
+      description: "Short summary of the blog post",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -34,41 +34,42 @@ export default defineType({
       type: "string",
       options: {
         list: [
-          { title: "Network Infrastructure", value: "Network Infrastructure" },
+          { title: "Network", value: "Network" },
           { title: "Cybersecurity", value: "Cybersecurity" },
-          { title: "Homelab", value: "Homelab" },
-          { title: "Magang", value: "Magang" },
+          { title: "Linux", value: "Linux" },
+          { title: "CTF Writeup", value: "CTF Writeup" },
+          { title: "Tutorial", value: "Tutorial" },
+          { title: "Other", value: "Other" },
         ],
         layout: "dropdown",
       },
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: "tools",
-      title: "Tools",
+      name: "tags",
+      title: "Tags",
       type: "array",
       of: [{ type: "string" }],
-      description: 'Tools used, e.g. ["Cisco Packet Tracer", "Wireshark"]',
       options: { layout: "tags" },
     }),
     defineField({
       name: "thumbnail",
       title: "Thumbnail",
       type: "image",
-      description: "Screenshot of topology or lab result",
       options: { hotspot: true },
-    }),
-    defineField({
-      name: "blogUrl",
-      title: "Blog URL",
-      type: "url",
-      description: "Link to external documentation (optional, leave empty if using content field below)",
+      fields: [
+        {
+          name: "alt",
+          type: "string",
+          title: "Alt text",
+        },
+      ],
     }),
     defineField({
       name: "content",
-      title: "Documentation Content",
+      title: "Content",
       type: "array",
-      description: "Full documentation/blog content for this project (Portable Text)",
+      description: "Blog post content (Portable Text)",
       of: [
         {
           type: "block",
@@ -150,10 +151,10 @@ export default defineType({
       ],
     }),
     defineField({
-      name: "date",
-      title: "Date",
+      name: "publishedAt",
+      title: "Published At",
       type: "date",
-      description: "Completion date",
+      description: "Publication date",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
