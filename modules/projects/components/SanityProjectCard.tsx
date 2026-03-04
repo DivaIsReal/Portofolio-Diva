@@ -36,7 +36,7 @@ const SanityProjectCard = ({
     description.slice(0, 85) + (description.length > 85 ? "..." : "");
 
   const thumbnailUrl = thumbnail
-    ? urlFor(thumbnail).width(450).height(200).url()
+    ? urlFor(thumbnail).width(450).url()
     : null;
 
   const documentationUrl = slug ? `/${locale}/projects/${slug.current}` : null;
@@ -54,10 +54,10 @@ const SanityProjectCard = ({
         <img
           src={thumbnailUrl}
           alt={title}
-          className="h-[200px] w-full object-cover"
+          className="aspect-video w-full object-cover object-top"
         />
       ) : (
-        <div className="flex h-[200px] w-full items-center justify-center bg-neutral-100 dark:bg-neutral-800">
+        <div className="flex aspect-video w-full items-center justify-center bg-neutral-100 dark:bg-neutral-800">
           <span className="text-sm text-neutral-400">No thumbnail</span>
         </div>
       )}
